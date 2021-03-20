@@ -3,15 +3,14 @@ package com.example.elevatorsimulation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @AllArgsConstructor
 @Service
 public class ElevatorSupervisor implements ElevatorSystemInterface {
     private ElevatorSearchService elevatorSearchService;
     private ElevatorRepository elevatorRepository;
+    private ElevatorMoveService elevatorMoveService;
 
     @Override
     public void pickup(int fillingFloor, Direction direction) {
@@ -27,7 +26,7 @@ public class ElevatorSupervisor implements ElevatorSystemInterface {
 
     @Override
     public void step() {
-        //TODO
+        elevatorMoveService.moveElevators();
     }
 
     @Override
