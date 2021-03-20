@@ -16,13 +16,13 @@ public class ElevatorSupervisor implements ElevatorSystemInterface {
     @Override
     public void pickup(int fillingFloor, Direction direction) {
         Elevator elevator = elevatorSearchService.find(fillingFloor, direction);
-        // TODO
+        elevator.addAnotherFloor(fillingFloor);
     }
 
     @Override
     public void update(int idElevator, int currentFloor, int targetFloor) {
         Elevator elevator = elevatorRepository.findElevatorById(idElevator);
-        // TODO
+        elevator.addAnotherFloor(targetFloor);
     }
 
     @Override
@@ -32,7 +32,6 @@ public class ElevatorSupervisor implements ElevatorSystemInterface {
 
     @Override
     public List<ElevatorStateDto> status(int idElevator, int currentFloor, int targetFloor) {
-        // TODO
-        return null;
+        return elevatorRepository.getCollectionElevator();
     }
 }

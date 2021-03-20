@@ -4,10 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.el.ELException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Repository
@@ -25,6 +24,15 @@ public class ElevatorRepository {
         Elevator elevator = new Elevator(++countElevator);
         elevatorMap.put(countElevator, elevator);
         freeElevators.add(elevator);
+    }
+
+    public List<ElevatorStateDto> getCollectionElevator() {
+        return elevatorMap
+                .values()
+                .parallelStream()
+                .map(el -> new ElevatorStateDto(el))
+                .collect(Collectors.toList());
+
     }
 
     public Elevator findElevatorById(int idElevator) {

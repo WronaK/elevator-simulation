@@ -4,7 +4,13 @@ import lombok.Data;
 
 @Data
 public class ElevatorStateDto {
-    public int idElevator;
+    private int idElevator;
     private int currentFloor;
     private int targetFloor;
+
+    public ElevatorStateDto(Elevator elevator) {
+        this.idElevator = elevator.getIdElevator();
+        this.currentFloor = elevator.getCurrentFloor();
+        this.targetFloor = elevator.getTargetFloor();
+    }
 }

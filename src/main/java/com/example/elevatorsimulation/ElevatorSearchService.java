@@ -13,30 +13,29 @@ public class ElevatorSearchService {
     private ElevatorRepository elevatorRepository;
 
     public Elevator find(int fillingFloor, Direction direction) {
-        Elevator elevator;
-        if(direction == Direction.UP) {
+        Elevator elevator = null;
+        if (direction == Direction.UP) {
             elevator = findGetUpDirectionElevator(fillingFloor);
-        } else {
+        } else if (direction == Direction.DOWN) {
             elevator = findGetDownDirectionElevator(fillingFloor);
         }
 
-        if(Objects.isNull(elevator))
+        if (Objects.isNull(elevator))
             elevator = findGetFreeElevator(fillingFloor);
-            initialFreeElevator(elevator, direction);
+        initialFreeElevator(elevator, direction);
         return elevator;
     }
 
     private Elevator findGetFreeElevator(int fillingFloor) {
         Elevator elevator = null;
         int distance = 100;
-        for (Elevator e: elevatorRepository.getFreeElevators()) {
-            if(e.getCurrentFloor() == fillingFloor) {
+        for (Elevator e : elevatorRepository.getFreeElevators()) {
+            if (e.getCurrentFloor() == fillingFloor) {
                 return e;
-            } else {
-                if(fillingFloor > e.getCurrentFloor() && distance < abs(fillingFloor - e.getCurrentFloor())) {
-                    distance = abs(fillingFloor - e.getCurrentFloor());
-                    elevator = e;
-                }
+            }
+            if (fillingFloor > e.getCurrentFloor() && distance < abs(fillingFloor - e.getCurrentFloor())) {
+                distance = abs(fillingFloor - e.getCurrentFloor());
+                elevator = e;
             }
         }
         return elevator;
@@ -45,14 +44,13 @@ public class ElevatorSearchService {
     private Elevator findGetUpDirectionElevator(int fillingFloor) {
         Elevator elevator = null;
         int distance = 100;
-        for (Elevator e: elevatorRepository.getElevatorsGoUp()) {
-            if(e.getCurrentFloor() == fillingFloor) {
+        for (Elevator e : elevatorRepository.getElevatorsGoUp()) {
+            if (e.getCurrentFloor() == fillingFloor) {
                 return e;
-            } else {
-                if(fillingFloor > e.getCurrentFloor() && distance < fillingFloor - e.getCurrentFloor()) {
-                    distance = fillingFloor - e.getCurrentFloor();
-                    elevator = e;
-                }
+            }
+            if (fillingFloor > e.getCurrentFloor() && distance < fillingFloor - e.getCurrentFloor()) {
+                distance = fillingFloor - e.getCurrentFloor();
+                elevator = e;
             }
         }
         return elevator;
@@ -61,14 +59,14 @@ public class ElevatorSearchService {
     private Elevator findGetDownDirectionElevator(int fillingFloor) {
         Elevator elevator = null;
         int distance = 100;
-        for (Elevator e: elevatorRepository.getElevatorsGoDown()) {
-            if(e.getCurrentFloor() == fillingFloor) {
+        for (Elevator e : elevatorRepository.getElevatorsGoDown()) {
+            if (e.getCurrentFloor() == fillingFloor) {
                 return e;
-            } else {
-                if(fillingFloor < e.getCurrentFloor() && distance < e.getCurrentFloor() - fillingFloor) {
-                    distance = e.getCurrentFloor() - fillingFloor;
-                    elevator = e;
-                }
+            }
+
+            if (fillingFloor < e.getCurrentFloor() && distance < e.getCurrentFloor() - fillingFloor) {
+                distance = e.getCurrentFloor() - fillingFloor;
+                elevator = e;
             }
         }
         return elevator;
@@ -76,10 +74,12 @@ public class ElevatorSearchService {
 
     private void initialFreeElevator(Elevator elevator, Direction direction) {
         elevatorRepository.getFreeElevators().remove(elevator);
-        if(direction == Direction.UP) {
+        if (direction == Direction.UP) {
             elevatorRepository.getElevatorsGoUp().add(elevator);
-        } else {
+            elevator.setDirection(Direction.UP);
+        } else if (direction == Direction.DOWN) {
             elevatorRepository.getElevatorsGoDown().add(elevator);
+            elevator.setDirection(Direction.DOWN);
         }
     }
 
