@@ -1,4 +1,4 @@
-package com.example.elevatorsimulation;
+package com.example.elevatorsimulation.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,12 +11,14 @@ public class Elevator {
     private int idElevator;
     private int currentFloor;
     private int targetFloor;
+    private int numberFloors;
     private Direction direction;
     private TreeSet<Integer> floorsStopsDirectionUp;
     private TreeSet<Integer> floorsStopsDirectionDown;
 
-    public Elevator(int idElevator) {
+    public Elevator(int idElevator, int numberFloors) {
         this.idElevator = idElevator;
+        this.numberFloors = numberFloors;
         this.currentFloor = 0;
         this.targetFloor = 0;
         this.direction = Direction.NONE;
@@ -24,59 +26,65 @@ public class Elevator {
         floorsStopsDirectionUp = new TreeSet<>();
     }
 
-    public void addAnotherFloor(int floor) {
-        if (direction == Direction.UP) {
-            addToUp(floor);
+    public void addAnotherFloor(int currentFloor, int targetFloor) {
+        if (targetFloor > currentFloor) {
+            floorsStopsDirectionUp.add(targetFloor);
         } else {
-            addToDown(floor);
-        }
-    }
-
-    private void addToUp(int floor) {
-        if(floor < currentFloor) {
-            floorsStopsDirectionDown.add(floor);
-        } else {
-            floorsStopsDirectionUp.add(floor);
-        }
-    }
-
-    private void addToDown(int floor) {
-        if(floor > currentFloor) {
-            floorsStopsDirectionUp.add(floor);
-        } else {
-            floorsStopsDirectionDown.add(floor);
+            floorsStopsDirectionDown.add(targetFloor);
         }
     }
 
     public void moveDown() {
-        currentFloor--;
-        if(!floorsStopsDirectionDown.isEmpty()) {
+        if (!floorsStopsDirectionDown.isEmpty()) {
             targetFloor = floorsStopsDirectionDown.last();
-            if(targetFloor == currentFloor)
+            if (targetFloor == currentFloor) {
                 floorsStopsDirectionDown.remove(targetFloor);
-        } else if(!floorsStopsDirectionUp.isEmpty()) {
+                return;
+            }
+        } else if (!floorsStopsDirectionUp.isEmpty()) {
             direction = Direction.UP;
             targetFloor = floorsStopsDirectionUp.first();
-            if(targetFloor == currentFloor)
+            if (targetFloor == currentFloor) {
                 floorsStopsDirectionUp.remove(targetFloor);
+                return;
+            }
         } else {
             direction = Direction.NONE;
         }
+        currentFloor--;
     }
 
     public void moveUp() {
-        currentFloor++;
-        if(!floorsStopsDirectionUp.isEmpty()) {
+        if (!floorsStopsDirectionUp.isEmpty()) {
             targetFloor = floorsStopsDirectionUp.first();
-            if(targetFloor == currentFloor)
+            if (targetFloor == currentFloor) {
                 floorsStopsDirectionUp.remove(targetFloor);
-        } else if(!floorsStopsDirectionDown.isEmpty()) {
+                return;
+            }
+        } else if (!floorsStopsDirectionDown.isEmpty()) {
             direction = Direction.DOWN;
             targetFloor = floorsStopsDirectionDown.last();
-            if(targetFloor == currentFloor)
+            if (targetFloor == currentFloor) {
                 floorsStopsDirectionDown.remove(targetFloor);
+                return;
+            }
         } else {
             direction = Direction.NONE;
+            return;
         }
+        currentFloor++;
+    }
+
+    public void transfer() {
+        if (targetFloor > currentFloor) {
+            currentFloor++;
+        } else if (targetFloor < currentFloor) {
+            currentFloor--;
+        }
+    }
+
+    public void removeTransferFloor() {
+        this.floorsStopsDirectionDown.remove(targetFloor);
+        this.floorsStopsDirectionUp.remove(targetFloor);
     }
 }

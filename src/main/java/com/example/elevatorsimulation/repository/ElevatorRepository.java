@@ -1,5 +1,8 @@
-package com.example.elevatorsimulation;
+package com.example.elevatorsimulation.repository;
 
+import com.example.elevatorsimulation.model.Direction;
+import com.example.elevatorsimulation.model.Elevator;
+import com.example.elevatorsimulation.model.StateDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
@@ -15,23 +18,30 @@ public class ElevatorRepository {
     private Map<Integer, Elevator> elevatorMap = new HashMap<>();
 
     private int countElevator = 0;
-    private List<Elevator> freeElevators = new ArrayList<>();
-    private List<Elevator> elevatorsGoUp = new ArrayList<>();
-    private List<Elevator> elevatorsGoDown = new ArrayList<>();
+    private List<Elevator> freeElevators;
+    private List<Elevator> elevatorsGoUp;
+    private List<Elevator> elevatorsGoDown;
+    private List<Elevator> elevatorsTransfer;
 
-    public void createElevator() {
-        Elevator elevator = new Elevator(++countElevator);
+    public ElevatorRepository() {
+        freeElevators = new LinkedList<>();
+        elevatorsGoUp = new LinkedList<>();
+        elevatorsGoDown = new LinkedList<>();
+        elevatorsTransfer = new LinkedList<>();
+    }
+
+    public void createElevator(int numberFloors) {
+        Elevator elevator = new Elevator(++countElevator, numberFloors);
         elevatorMap.put(countElevator, elevator);
         freeElevators.add(elevator);
     }
 
-    public List<ElevatorStateDto> getCollectionElevator() {
+    public List<StateDto> getElevatorsState() {
         return elevatorMap
                 .values()
                 .parallelStream()
-                .map(el -> new ElevatorStateDto(el))
+                .map(StateDto::new)
                 .collect(Collectors.toList());
-
     }
 
     public Elevator findElevatorById(int idElevator) {
@@ -39,11 +49,11 @@ public class ElevatorRepository {
     }
 
     public void changeDirectionMove(Elevator elevator, Direction previousDirection, Direction presentDirection) {
-        removeElevator(elevator, previousDirection);
-        addElevator(elevator, presentDirection);
+        unregisterElevatorDirection(elevator, previousDirection);
+        registerElevatorDirection(elevator, presentDirection);
     }
 
-    private void removeElevator(Elevator elevator, Direction direction) {
+    private void unregisterElevatorDirection(Elevator elevator, Direction direction) {
         switch (direction) {
             case UP:
                 elevatorsGoUp.remove(elevator);
@@ -57,7 +67,7 @@ public class ElevatorRepository {
         }
     }
 
-    private void addElevator(Elevator elevator, Direction direction) {
+    public void registerElevatorDirection(Elevator elevator, Direction direction) {
         switch (direction) {
             case UP:
                 elevatorsGoUp.add(elevator);
@@ -69,5 +79,14 @@ public class ElevatorRepository {
                 freeElevators.add(elevator);
                 break;
         }
+        elevator.setDirection(direction);
+    }
+
+    public void addToTransfer(Elevator elevator) {
+        elevatorsTransfer.add(elevator);
+    }
+
+    public void removeFromTransfer(Elevator elevator) {
+        elevatorsTransfer.remove(elevator);
     }
 }

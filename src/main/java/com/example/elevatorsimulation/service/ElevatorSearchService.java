@@ -1,5 +1,8 @@
-package com.example.elevatorsimulation;
+package com.example.elevatorsimulation.service;
 
+import com.example.elevatorsimulation.model.Direction;
+import com.example.elevatorsimulation.model.Elevator;
+import com.example.elevatorsimulation.repository.ElevatorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,35 +23,45 @@ public class ElevatorSearchService {
             elevator = findGetDownDirectionElevator(fillingFloor);
         }
 
-        if (Objects.isNull(elevator))
-            elevator = findGetFreeElevator(fillingFloor);
-        initialFreeElevator(elevator, direction);
+        if (Objects.isNull(elevator)) {
+            elevator = findGetFreeElevator(fillingFloor, direction);
+        }
         return elevator;
     }
 
-    private Elevator findGetFreeElevator(int fillingFloor) {
+    private Elevator findGetFreeElevator(int fillingFloor, Direction direction) {
         Elevator elevator = null;
-        int distance = 100;
+        int distance = Integer.MAX_VALUE;
         for (Elevator e : elevatorRepository.getFreeElevators()) {
             if (e.getCurrentFloor() == fillingFloor) {
+                initialFreeElevator(e, direction);
                 return e;
             }
-            if (fillingFloor > e.getCurrentFloor() && distance < abs(fillingFloor - e.getCurrentFloor())) {
-                distance = abs(fillingFloor - e.getCurrentFloor());
+            if (abs(distance) > abs(fillingFloor - e.getCurrentFloor())) {
+                distance = fillingFloor - e.getCurrentFloor();
                 elevator = e;
             }
         }
+
+        if (Objects.isNull(elevator)) {
+            return null;
+        }
+
+        elevatorRepository.getFreeElevators().remove(elevator);
+        elevatorRepository.addToTransfer(elevator);
+        elevator.setDirection(direction);
+        elevator.setTargetFloor(fillingFloor);
         return elevator;
     }
 
     private Elevator findGetUpDirectionElevator(int fillingFloor) {
         Elevator elevator = null;
-        int distance = 100;
+        int distance = Integer.MAX_VALUE;
         for (Elevator e : elevatorRepository.getElevatorsGoUp()) {
             if (e.getCurrentFloor() == fillingFloor) {
                 return e;
             }
-            if (fillingFloor > e.getCurrentFloor() && distance < fillingFloor - e.getCurrentFloor()) {
+            if (fillingFloor > e.getCurrentFloor() && distance > fillingFloor - e.getCurrentFloor()) {
                 distance = fillingFloor - e.getCurrentFloor();
                 elevator = e;
             }
@@ -58,13 +71,13 @@ public class ElevatorSearchService {
 
     private Elevator findGetDownDirectionElevator(int fillingFloor) {
         Elevator elevator = null;
-        int distance = 100;
+        int distance = Integer.MAX_VALUE;
         for (Elevator e : elevatorRepository.getElevatorsGoDown()) {
             if (e.getCurrentFloor() == fillingFloor) {
                 return e;
             }
 
-            if (fillingFloor < e.getCurrentFloor() && distance < e.getCurrentFloor() - fillingFloor) {
+            if (fillingFloor < e.getCurrentFloor() && distance > e.getCurrentFloor() - fillingFloor) {
                 distance = e.getCurrentFloor() - fillingFloor;
                 elevator = e;
             }
