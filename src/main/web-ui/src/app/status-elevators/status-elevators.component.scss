@@ -1,0 +1,32 @@
+@import "../../main-style";
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include backgroundGradient;
+  @include shadow;
+  color: white;
+  font-size: 1.2em;
+  min-height: 50px;
+  padding: 0 10px;
+}
+
+table {
+  width: 80%;
+  text-align: center;
+  margin: 10px auto 10px auto;
+  box-shadow: 4px 3px wheat;
+
+  .mat-header-row {
+    @include backgroundGradient;
+    .mat-header-cell {
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+

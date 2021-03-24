@@ -1,0 +1,32 @@
+<div class="content">
+  <div class="header">
+    Elevators update
+  </div>
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>Enter the number elevator</mat-label>
+      <input matInput [formControl]="idElevatorFC" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Enter the current floor</mat-label>
+      <input matInput [formControl]="currentFloorFC" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Enter the target floor</mat-label>
+      <input matInput [formControl]="targetFloorFC" type="number">
+    </mat-form-field>
+
+    <button mat-raised-button (click)="addUpdate()" [disabled]="formGroup.invalid">Add new update</button>
+  </form>
+
+  <div class="done-steps">
+    <div class="header">Steps taken</div>
+    <div class="steps" *ngFor="let update of updates">
+      <div>
+        update({{update.idElevator}}, {{update.currentFloor}}, {{update.targetFloor}})
+      </div>
+    </div>
+  </div>
+</div>

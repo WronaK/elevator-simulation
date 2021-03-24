@@ -1,0 +1,32 @@
+@import "../../main-style";
+
+.main-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .top-bar {
+    width: 100%;
+    height: 70px;
+    @include centerElement;
+    @include backgroundGradient;
+    box-shadow: -1px 10px 5px 0px rgba(186,167,167,0.75);
+    color: white;
+    font-size: 2em;
+  }
+
+  .content {
+    padding: 10px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    grid-gap: 1em;
+
+    app-status-elevators {
+      grid-row-start: 1;
+      grid-column-start: 3;
+      grid-row-end: 3;
+    }
+  }
+}

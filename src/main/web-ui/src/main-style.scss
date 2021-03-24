@@ -1,0 +1,13 @@
+@mixin backgroundGradient() {
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(122,70,252,1) 100%);
+}
+
+@mixin shadow() {
+  box-shadow: 4px 3px wheat;
+}
+
+@mixin centerElement() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

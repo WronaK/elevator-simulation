@@ -1,0 +1,30 @@
+<div class="content">
+  <div class="header">
+    Elevators calls
+  </div>
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>Enter the floor number</mat-label>
+      <input matInput [formControl]="fillingFloorFC" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose the direction</mat-label>
+      <select matNativeControl [formControl]="directionFC">
+        <option value="down">DOWN</option>
+        <option value="up">UP</option>
+      </select>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="addPickup()" [disabled]="formGroup.invalid">Add new pickup</button>
+  </form>
+
+  <div class="done-steps">
+    <div class="header">Steps taken</div>
+    <div class="steps" *ngFor="let pickup of pickups">
+       <div>
+          pickup({{pickup.fillingFloor}}, {{pickup.direction}})
+       </div>
+    </div>
+  </div>
+</div>

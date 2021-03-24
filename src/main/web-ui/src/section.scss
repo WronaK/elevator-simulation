@@ -1,0 +1,29 @@
+@import "main-style";
+
+.header {
+  color: white;
+  font-size: 1.2em;
+  min-height: 50px;
+  @include backgroundGradient;
+  @include centerElement;
+  @include shadow;
+}
+
+form {
+  margin: 10px 0;
+  @include centerElement;
+  flex-direction: column;
+}
+
+.done-steps {
+  display: flex;
+  flex-direction: column;
+  .steps {
+    margin-top: 5px;
+    line-height: 1.2em;
+    font-size: 1.2em;
+    min-height: 30px;
+    @include shadow;
+    @include centerElement;
+  }
+}
