@@ -16,11 +16,6 @@ public class ElevatorController {
         return elevatorSystemInterface.status();
     }
 
-    @PostMapping("/create")
-    public void createElevator(@RequestParam int numberFloors) {
-        elevatorSystemInterface.createElevator(numberFloors);
-    }
-
     @PostMapping("/step")
     public void step() {
         elevatorSystemInterface.step();

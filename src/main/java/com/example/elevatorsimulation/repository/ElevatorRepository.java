@@ -30,8 +30,8 @@ public class ElevatorRepository {
         elevatorsTransfer = new LinkedList<>();
     }
 
-    public void createElevator(int numberFloors) {
-        Elevator elevator = new Elevator(++countElevator, numberFloors);
+    public void createElevator() {
+        Elevator elevator = new Elevator(++countElevator);
         elevatorMap.put(countElevator, elevator);
         freeElevators.add(elevator);
     }
@@ -88,5 +88,14 @@ public class ElevatorRepository {
 
     public void removeFromTransfer(Elevator elevator) {
         elevatorsTransfer.remove(elevator);
+    }
+
+    public Elevator checkIsTransfer(int fillingFloor, Direction direction) {
+        for(Elevator e: elevatorsTransfer) {
+            if(e.getTargetFloor() == fillingFloor && e.getDirection() == direction) {
+                return e;
+            }
+        }
+        return null;
     }
 }

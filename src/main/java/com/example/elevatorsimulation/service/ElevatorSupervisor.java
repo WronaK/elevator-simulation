@@ -22,8 +22,8 @@ public class ElevatorSupervisor implements ElevatorSystemInterface {
     private List<WaiterInfo> waitingQueue = new ArrayList();
 
     @Override
-    public void createElevator(int numberFloors) {
-        elevatorRepository.createElevator(numberFloors);
+    public void createElevator() {
+        elevatorRepository.createElevator();
     }
 
     @Override

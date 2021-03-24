@@ -25,7 +25,7 @@ export class ElevatorSystemService {
     const params = new HttpParams()
       .set('id', paramsUpdate.idElevator.toString())
       .set('currentFloor', paramsUpdate.currentFloor.toString())
-      .set('targetFloor', paramsUpdate.idElevator.toString());
+      .set('targetFloor', paramsUpdate.targetFloor.toString());
 
     this.http.put<void>('/update', params).subscribe();
   }

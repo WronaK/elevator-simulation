@@ -24,7 +24,10 @@ public class ElevatorSearchService {
         }
 
         if (Objects.isNull(elevator)) {
-            elevator = findGetFreeElevator(fillingFloor, direction);
+            elevator = elevatorRepository.checkIsTransfer(fillingFloor, direction);
+            if (Objects.isNull(elevator)) {
+                elevator = findGetFreeElevator(fillingFloor, direction);
+            }
         }
         return elevator;
     }

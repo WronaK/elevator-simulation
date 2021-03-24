@@ -6,7 +6,7 @@ import com.example.elevatorsimulation.repository.ElevatorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -21,7 +21,7 @@ public class ElevatorMoveService {
     }
 
     private void moveElevatorsTransfer() {
-        List<Elevator> toDelete = new ArrayList<>();
+        List<Elevator> toDelete = new LinkedList<>();
         for (Elevator elevator : elevatorRepository.getElevatorsTransfer()) {
             elevator.transfer();
             if (elevator.getCurrentFloor() == elevator.getTargetFloor()) {
@@ -37,7 +37,7 @@ public class ElevatorMoveService {
     }
 
     private void moveElevatorsDown() {
-        List<Elevator> toDelete = new ArrayList<>();
+        List<Elevator> toDelete = new LinkedList<>();
         for (Elevator elevator : elevatorRepository.getElevatorsGoDown()) {
             elevator.moveDown();
             if (elevator.getDirection() != Direction.DOWN) {
@@ -51,7 +51,7 @@ public class ElevatorMoveService {
     }
 
     private void moveElevatorsUp() {
-        List<Elevator> toDelete = new ArrayList<>();
+        List<Elevator> toDelete = new LinkedList<>();
 
         for (Elevator elevator : elevatorRepository.getElevatorsGoUp()) {
             elevator.moveUp();
